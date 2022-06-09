@@ -4,3 +4,9 @@
 
 ### yarn 来安装项目所需的包
 ### yarn start 来运行项目
+
+
+
+例子：
+
+![image-20220609163450027](C:\Users\work\AppData\Roaming\Typora\typora-user-images\image-20220609163450027.png)
