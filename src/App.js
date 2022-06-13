@@ -1,5 +1,5 @@
-import "./App.less";
 import "ol/ol.css";
+import "./App.less";
 import React, { useState, useRef, useEffect } from "react";
 import OSM from "ol/source/OSM";
 import Map from "ol/Map";
@@ -15,7 +15,8 @@ import XYZ from "ol/source/XYZ";
 import Draw from "ol/interaction/Draw";
 import * as olControl from "ol/control";
 import { Style, Circle, Fill, Stroke } from "ol/style";
-
+import { message } from 'antd'
+// import 'antd/dist/antd.css';
 function App() {
   const [coordinate, setCoordinate] = useState("请画线"); //画线的坐标集合
   const [toolLayer, setToolLayer] = useState({});
@@ -206,7 +207,7 @@ function App() {
     lineDraw.on("drawend", event => {
       setCoordinate(JSON.stringify(event.feature.getGeometry().getCoordinates()));
     });
-    var map9 = new Map({
+    mapList.map9 = new Map({
       layers: [
         new TileLayer({
           source: new XYZ({
@@ -230,21 +231,40 @@ function App() {
       // ol.control.ZoomToExtent: 放大到设定区域控件
       controls: olControl
         .defaults({
-          attribution: false,
-          rotate: false,
           zoom: true,
         })
         .extend([
-          new olControl.FullScreen(),
+          new olControl.FullScreen({
+            className: "quanping",
+          }),
           new olControl.MousePosition(),
           new olControl.OverviewMap(),
           new olControl.ScaleLine(),
           new olControl.ZoomSlider(),
           new olControl.ZoomToExtent(),
+          new olControl.Rotate(),
         ]),
       target: "map9",
     });
-  };
+
+    mapList.map9.on("singleclick", function (e) {
+      let coor = e.coordinate;
+      console.log(e.coordinate);
+      //复制到剪切板
+      let oInput = document.createElement("input");
+      oInput.value = coor;
+      document.body.appendChild(oInput);
+      oInput.select();
+      document.execCommand("Copy");
+      oInput.style.display = "none";
+      message.success("已复制坐标到剪贴板");
+      setTimeout(() => {
+        document.body.removeChild(oInput);   
+      }, 1000);
+    });
+  };    
+
+  //单击获取地图坐标
 
   // 交换地图
   const swapMap = () => {
