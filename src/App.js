@@ -15,18 +15,20 @@ import XYZ from "ol/source/XYZ";
 import Draw from "ol/interaction/Draw";
 import * as olControl from "ol/control";
 import { Style, Circle, Fill, Stroke } from "ol/style";
-import { message } from 'antd'
+import { message } from "antd";
 // import 'antd/dist/antd.css';
+let lineDraw;
 function App() {
   const [coordinate, setCoordinate] = useState("请画线"); //画线的坐标集合
   const [toolLayer, setToolLayer] = useState({});
   const [mapList, setMapList] = useState({});
+  const [isdraw, setIsdraw] = useState(false);
   useEffect(() => {
     loadMap();
   }, []);
   var alllay;
+
   var osmSource = new OSM();
-  var lineDraw;
   const loadMap = () => {
     var map1 = new Map({
       view: new View({
@@ -259,10 +261,10 @@ function App() {
       oInput.style.display = "none";
       message.success("已复制坐标到剪贴板");
       setTimeout(() => {
-        document.body.removeChild(oInput);   
+        document.body.removeChild(oInput);
       }, 1000);
     });
-  };    
+  };
 
   //单击获取地图坐标
 
@@ -348,13 +350,20 @@ function App() {
     // const allLay = map8.getAllLayers();
     // console.log(allLay);
     // allLay[1].getSource().clear();
-    console.log(mapList.map8.getAllLayers()[1]);
+    // console.log(mapList.map8.getAllLayers()[1]);
     mapList.map8.getAllLayers()[1] && toolLayer.Line.getSource().clear();
     mapList.map8.getAllLayers()[1] && setCoordinate("暂无坐标");
   };
+  // 添加画线图层
   const drawLine = () => {
-    mapList.map8.addLayer(toolLayer.Line);
+    setIsdraw(true);
+    !mapList.map8.getAllLayers()[1] && mapList.map8.addLayer(toolLayer.Line);
     mapList.map8.addInteraction(lineDraw);
+  };
+  // 停止画线
+  const stopdrawLine = () => {
+    setIsdraw(false);
+    mapList.map8.removeInteraction(lineDraw);
   };
 
   return (
@@ -484,14 +493,25 @@ function App() {
         >
           地图8（画线）
         </p>
-        <button
-          style={{ marginRight: "15px" }}
-          onClick={() => {
-            drawLine();
-          }}
-        >
-          画线
-        </button>
+        {!isdraw ? (
+          <button
+            style={{ marginRight: "15px" }}
+            onClick={() => {
+              drawLine();
+            }}
+          >
+            画线
+          </button>
+        ) : (
+          <button
+            style={{ marginRight: "15px", backgroundColor: "red" }}
+            onClick={() => {
+              stopdrawLine();
+            }}
+          >
+            停止
+          </button>
+        )}
         <button
           onClick={() => {
             removeLine();
