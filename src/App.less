@@ -1,10 +1,70 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .App {
   height: 100%;
   // width: 100%;
   color: rgb(230, 227, 227) !important;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
+
+  .ggg {
+    width: 420px;
+    // border: 1px solid #ff6700;
+    overflow: hidden;
+      position: relative;
+      font-size: 25px;
+      font-weight: 900;
+      left: 280px;
+      top: 68px;
+      color: #000;
+    .guanggao {
+      width: 550px;
+      // background-color: rgb(219, 133, 133);
+
+      animation: 10s wordsLoop linear infinite normal;
+    }
+
+  }
+
+  @keyframes wordsLoop {
+
+    0% {
+
+      transform: translateX(100%);
+
+      -webkit-transform: translateX(100%);
+
+    }
+
+    100% {
+
+      transform: translateX(-100%);
+
+      -webkit-transform: translateX(-100%);
+
+    }
+
+  }
+
+
+
+  @-webkit-keyframes wordsLoop {
+
+    0% {
+
+      transform: translateX(100%);
+
+      -webkit-transform: translateX(100%);
+
+    }
+
+    100% {
+
+      transform: translateX(-100%);
+
+      -webkit-transform: translateX(-100%);
+
+    }
+  }
 
   .title {
     color: rgb(244, 255, 196) !important;
@@ -13,13 +73,33 @@
   h1 {
     color: rgb(230, 227, 227) !important;
   }
-  button{
+
+  button {
     color: #000;
     font-size: small;
-     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   }
+
   .ant-message-notice-content {
     background-color: #fff;
+  }
+
+  .separatecol {
+    position: absolute;
+    top: 20px;
+    left: 350px;
+    height: 85vh;
+    width: 2px;
+    border-left: 3px solid rgb(131, 125, 125);
+  }
+
+  .separaterow {
+    position: absolute;
+    top: 815px;
+    left: 50px;
+    height: 2px;
+    width: 2800px;
+    border-bottom: 3px solid rgb(240, 82, 82);
   }
 
   .mapall1 {
@@ -105,6 +185,15 @@
     position: absolute;
     top: 0;
     left: 1700px;
+
+    .separatecol {
+      position: absolute;
+      top: 20px;
+      left: 1100px;
+      height: 85vh;
+      width: 2px;
+      border-left: 3px solid rgb(131, 125, 125);
+    }
 
     #map9 {
       height: 600px;

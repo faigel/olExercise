@@ -16,19 +16,25 @@ import Draw from "ol/interaction/Draw";
 import * as olControl from "ol/control";
 import { Style, Circle, Fill, Stroke } from "ol/style";
 import { message } from "antd";
-// import 'antd/dist/antd.css';
-let lineDraw;
-function App() {
+
+const App = () => {
   const [coordinate, setCoordinate] = useState("请画线"); //画线的坐标集合
   const [toolLayer, setToolLayer] = useState({});
   const [mapList, setMapList] = useState({});
   const [isdraw, setIsdraw] = useState(false);
+  const [mapLayer, setMapLayer] = useState();
   useEffect(() => {
     loadMap();
+    return () => {
+      window.location.reload();
+    };
   }, []);
   var alllay;
-
   var osmSource = new OSM();
+  let omsLayer = new TileLayer({
+    source: new OSM(),
+  });
+  // 加载地图
   const loadMap = () => {
     var map1 = new Map({
       view: new View({
@@ -37,14 +43,14 @@ function App() {
         projection: "EPSG:4326",
         zoom: 7,
       }),
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
+      // layers: [
+      //   new TileLayer({
+      //     source: new OSM(),
+      //   }),
+      // ],
       target: "map1",
     });
-
+    map1.addLayer(omsLayer);
     var map2 = new Map({
       logo: false,
       view: new View({
@@ -61,7 +67,7 @@ function App() {
       ],
       target: "map2",
     });
-
+    // map2.addLayer(omsLayer);
     var view = new View({
       center: [119.61028, 28.20652],
       projection: "EPSG:4326",
@@ -200,13 +206,13 @@ function App() {
         }),
       }),
     });
-    lineDraw = new Draw({
+    toolLayer.lineDraw = new Draw({
       type: "LineString",
       source: toolLayer.Line.getSource(), //注意设置source,这样绘制好的线，就会添加到这个source里
       maxPoints: 5,
     });
     // 绘线结束的监听
-    lineDraw.on("drawend", event => {
+    toolLayer.lineDraw.on("drawend", event => {
       setCoordinate(JSON.stringify(event.feature.getGeometry().getCoordinates()));
     });
     mapList.map9 = new Map({
@@ -351,6 +357,7 @@ function App() {
     // console.log(allLay);
     // allLay[1].getSource().clear();
     // console.log(mapList.map8.getAllLayers()[1]);
+    // removeMap()
     mapList.map8.getAllLayers()[1] && toolLayer.Line.getSource().clear();
     mapList.map8.getAllLayers()[1] && setCoordinate("暂无坐标");
   };
@@ -358,12 +365,12 @@ function App() {
   const drawLine = () => {
     setIsdraw(true);
     !mapList.map8.getAllLayers()[1] && mapList.map8.addLayer(toolLayer.Line);
-    mapList.map8.addInteraction(lineDraw);
+    mapList.map8.addInteraction(toolLayer.lineDraw);
   };
   // 停止画线
   const stopdrawLine = () => {
     setIsdraw(false);
-    mapList.map8.removeInteraction(lineDraw);
+    mapList.map8.removeInteraction(toolLayer.lineDraw);
   };
 
   return (
@@ -374,13 +381,16 @@ function App() {
         <div id="map1"></div>
         <p className="title">地图2（缩放层级限制）</p>
         <div id="map2"></div>
+        <div className="separatecol"></div>
       </div>
+
       <div className="mapall2">
         <h1>地图联动</h1>
         <p className="title">地图3</p>
         <div id="map3"></div>
         <p className="title">地图4（高德卫星图）</p>
         <div id="map4"></div>
+        <div className="separatecol"></div>
       </div>
       <div className="mapall3">
         <h1>动态交换地图</h1>
@@ -433,6 +443,7 @@ function App() {
           向右移动
         </button>
         <div id="map6"></div>
+        <div className="separatecol"></div>
       </div>
       <div className="mapall4">
         <h1>矢量地图图层叠加</h1>
@@ -521,6 +532,7 @@ function App() {
         </button>
         <div>{`坐标：${coordinate}`}</div>
         <div id="map8"></div>
+        <div className="separatecol"></div>
       </div>
       <div className="mapall5">
         <h1>地图控件</h1>
@@ -549,12 +561,20 @@ function App() {
           <h5>ol.control.ZoomSlider: 缩放滚动条控件</h5>
           <h5>ol.control.ZoomToExtent: 放大到设定区域控件</h5>
         </div>
+        <div className="separatecol"></div>
       </div>
-      <div style={{ marginLeft: "50px", marginTop: "80px" }}>
-        此demo仅为练手项目，本页面的所有地图及其交互方法全部系本人独立完成。
+      <div className="separaterow"></div>
+      <div style={{ marginLeft: "50px", marginTop: "90px", color: "rgb(240, 82, 82)" }}>
+        此olExercise项目仅为练手项目，本页面的所有地图及其交互方法全部系本人独立完成。
+      </div>
+      <div style={{ marginLeft: "50px", marginTop: "10px", color: "#fff" }}>
+        介绍：
+        OpenLayers3简称ol3，它是一个开源的WebGIS引擎，使用了JavaScript、最新的HTML5技术及CSS技术，支持dom，canvas和webgl三种渲染方式。除了支持网页端，还支持移动端（目前移动端还不成熟，有待进一步完善）。在地图数据源方面，支持各种类型的瓦片地图，既支持在线的，也支持离线的。比如OSM,
+        Bing, MapBox,
+        Stamen,MapQuest等等；还支持各种矢量地图，比如GeoJSON，TopoJSON，KML，GML等等。随着OpenLayers3的进一步发展，将支持更多的地图类型。
       </div>
     </div>
   );
-}
+};
 
 export default App;
