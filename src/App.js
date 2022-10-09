@@ -1,6 +1,6 @@
 import "ol/ol.css";
 import "./App.less";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useReducer } from "react";
 import OSM from "ol/source/OSM";
 import Map from "ol/Map";
 import View from "ol/View";
@@ -16,15 +16,34 @@ import Draw from "ol/interaction/Draw";
 import * as olControl from "ol/control";
 import { Style, Circle, Fill, Stroke } from "ol/style";
 import { message } from "antd";
+import GeoJSON from "ol/format/GeoJSON";
+import { createBox } from "ol/interaction/Draw";
+
+import { saveAs } from "file-saver";
 
 const App = () => {
+  const mapReduce = (state, action) => {
+    switch (action.type) {
+      case "add":
+        return state + 1;
+      case "minus":
+        return state - 1;
+      default:
+        return state;
+    }
+  };
+  const [map, mapDispatch] = useReducer(mapReduce, 0);
+  console.log(map);
   const [coordinate, setCoordinate] = useState("请画线"); //画线的坐标集合
   const [toolLayer, setToolLayer] = useState({});
   const [mapList, setMapList] = useState({});
   const [isdraw, setIsdraw] = useState(false);
   const [mapLayer, setMapLayer] = useState();
+  const [dbxlayer, setDbxlayer] = useState();
+  const [dbxdraw, setDbxdraw] = useState();
   useEffect(() => {
     loadMap();
+    mapDispatch({ type: "add" });
     return () => {
       window.location.reload();
     };
@@ -270,8 +289,69 @@ const App = () => {
         document.body.removeChild(oInput);
       }, 1000);
     });
+    mapList.map10 = new Map({
+      layers: [
+        new TileLayer({
+          source: new XYZ({
+            url: "http://webst0{1-4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+          }),
+        }),
+      ],
+      view: new View({
+        center: [119.920701113613, 28.464831926462],
+        projection: "EPSG:4326",
+        zoom: 14,
+      }),
+      target: "map10",
+    });
+    var dbxlayer = new VectorLayer({
+      source: new VectorSource(),
+      name: "dbxlayer",
+      style: new Style({
+        stroke: new Stroke({
+          color: "red",
+          width: 4,
+        }),
+        fill: new Fill({
+          color: "rgba(255, 255, 255, 0.8)",
+        }),
+      }),
+    });
+    setDbxlayer(dbxlayer);
+    mapList.map10.addLayer(dbxlayer);
   };
-
+  // 绘制矩形
+  const drawCircle = () => {
+    console.log(dbxlayer);
+    if (mapList.map10.getAllLayers().find(item => item?.getProperties().name == "dbxlayer")) {
+      mapList.map10.removeLayer(dbxlayer);
+      mapList.map10.addLayer(dbxlayer);
+    } else {
+      mapList.map10.addLayer(dbxlayer);
+    }
+    var dbxdraw = new Draw({
+      source: dbxlayer.getSource(),
+      type: "Circle", //矩形绘制
+      // type: 'Polygon',//多边形绘制
+      geometryFunction: createBox(),
+    });
+    setDbxdraw(dbxdraw);
+    mapList.map10.addInteraction(dbxdraw);
+    dbxdraw.on("drawend", function (e) {
+      // var geom = e.feature.getGeometry();//拿到绘制图形的geometry
+      mapList.map10.removeInteraction(dbxdraw); //移除绘制状态，一次只绘制一个图形
+      let featureGeoJson = JSON.parse(new GeoJSON().writeFeature(e.feature)); //将绘制图层转为geojson
+      console.log(featureGeoJson);
+      const blob = new Blob([featureGeoJson.geometry.coordinates]);
+      saveAs(blob, "矩形");
+    });
+  };
+  // 清除矩形
+  const clearCircle = () => {
+    dbxlayer.getSource().clear();
+    mapList.map10.removeInteraction(dbxdraw);
+    mapList.map10.removeLayer(dbxlayer);
+  };
   //单击获取地图坐标
 
   // 交换地图
@@ -563,6 +643,31 @@ const App = () => {
         </div>
         <div className="separatecol"></div>
       </div>
+      <div className="mapall6">
+        <h1>地图多边形导出</h1>
+        <p
+          style={{ display: "inline-block", marginRight: "30px", marginTop: "1px" }}
+          className="title"
+        >
+          地图10
+        </p>
+        <button
+          onClick={() => {
+            drawCircle();
+          }}
+        >
+          绘制
+        </button>
+        <button
+          onClick={() => {
+            clearCircle();
+          }}
+        >
+          清除
+        </button>
+        <div id="map10"></div>
+        <div className="separatecol"></div>
+      </div>
       <div className="separaterow"></div>
       <div style={{ marginLeft: "50px", marginTop: "90px", color: "rgb(240, 82, 82)" }}>
         此olExercise项目仅为练手项目，本页面的所有地图及其交互方法全部系本人独立完成。
@@ -573,6 +678,7 @@ const App = () => {
         Bing, MapBox,
         Stamen,MapQuest等等；还支持各种矢量地图，比如GeoJSON，TopoJSON，KML，GML等等。随着OpenLayers3的进一步发展，将支持更多的地图类型。
       </div>
+      {/* <button onClick={() => mapDispatch({ type: "add" })}>dianji</button> */}
     </div>
   );
 };
