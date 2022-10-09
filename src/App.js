@@ -274,6 +274,7 @@ const App = () => {
       target: "map9",
     });
 
+    //单击获取地图坐标
     mapList.map9.on("singleclick", function (e) {
       let coor = e.coordinate;
       console.log(e.coordinate);
@@ -352,7 +353,6 @@ const App = () => {
     mapList.map10.removeInteraction(dbxdraw);
     mapList.map10.removeLayer(dbxlayer);
   };
-  //单击获取地图坐标
 
   // 交换地图
   const swapMap = () => {
