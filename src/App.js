@@ -53,6 +53,7 @@ const App = () => {
   let omsLayer = new TileLayer({
     source: new OSM(),
   });
+
   // 加载地图
   const loadMap = () => {
     var map1 = new Map({
@@ -332,19 +333,20 @@ const App = () => {
     }
     var dbxdraw = new Draw({
       source: dbxlayer.getSource(),
-      type: "Circle", //矩形绘制
-      // type: 'Polygon',//多边形绘制
-      geometryFunction: createBox(),
+      // type: "Circle", //矩形绘制
+      type: "Polygon", //多边形绘制
+      // geometryFunction: createBox(),
     });
     setDbxdraw(dbxdraw);
     mapList.map10.addInteraction(dbxdraw);
     dbxdraw.on("drawend", function (e) {
+      console.log(e);
       // var geom = e.feature.getGeometry();//拿到绘制图形的geometry
       mapList.map10.removeInteraction(dbxdraw); //移除绘制状态，一次只绘制一个图形
       let featureGeoJson = JSON.parse(new GeoJSON().writeFeature(e.feature)); //将绘制图层转为geojson
-      console.log(featureGeoJson);
+      console.log(featureGeoJson.geometry.coordinates);
       const blob = new Blob([featureGeoJson.geometry.coordinates]);
-      saveAs(blob, "矩形");
+      // saveAs(blob, "矩形");
     });
   };
   // 清除矩形
@@ -452,9 +454,16 @@ const App = () => {
     setIsdraw(false);
     mapList.map8.removeInteraction(toolLayer.lineDraw);
   };
+  const yWhell = e => {
+    console.log(e);
+    console.log(e.deltaY);
+    console.log(e.currentTarget.scrollLeft);
+    e.currentTarget.scrollLeft += e.deltaY;
+    console.log(e.currentTarget.scrollLeft);
+  };
 
   return (
-    <div className="App">
+    <div className="App" onWheel={e =>yWhell(e)}>
       <div className="mapall1">
         <h1>单页面多地图</h1>
         <p className="title">地图1（地图范围限制）</p>
