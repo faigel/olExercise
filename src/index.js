@@ -10,3 +10,4 @@ createRoot(document.getElementById("root")).render(<App tab="home" />);
 // 然后
 // git config --global --unset https.proxy
 // git config --global --unset http.proxy
+// git config --global -l  查看
