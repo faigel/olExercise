@@ -346,7 +346,7 @@ const App = () => {
       let featureGeoJson = JSON.parse(new GeoJSON().writeFeature(e.feature)); //将绘制图层转为geojson
       console.log(featureGeoJson.geometry.coordinates);
       const blob = new Blob([featureGeoJson.geometry.coordinates]);
-      // saveAs(blob, "矩形");
+      saveAs(blob, "矩形");
     });
   };
   // 清除矩形
