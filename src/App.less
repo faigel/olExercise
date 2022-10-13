@@ -1,71 +1,11 @@
 @import "~antd/dist/antd.css";
 
 .App {
-  height: 100%;
-  width: auto;
+  height: 100vh;
   color: rgb(230, 227, 227) !important;
   font-family: "Courier New", Courier, monospace;
-
-  .ggg {
-    width: 420px;
-    // border: 1px solid #ff6700;
-    overflow: hidden;
-    position: relative;
-    font-size: 25px;
-    font-weight: 900;
-    left: 280px;
-    top: 68px;
-    color: #000;
-
-    .guanggao {
-      width: 550px;
-      // background-color: rgb(219, 133, 133);
-
-      animation: 10s wordsLoop linear infinite normal;
-    }
-
-  }
-
-  @keyframes wordsLoop {
-
-    0% {
-
-      transform: translateX(100%);
-
-      -webkit-transform: translateX(100%);
-
-    }
-
-    100% {
-
-      transform: translateX(-100%);
-
-      -webkit-transform: translateX(-100%);
-
-    }
-
-  }
-
-
-
-  @-webkit-keyframes wordsLoop {
-
-    0% {
-
-      transform: translateX(100%);
-
-      -webkit-transform: translateX(100%);
-
-    }
-
-    100% {
-
-      transform: translateX(-100%);
-
-      -webkit-transform: translateX(-100%);
-
-    }
-  }
+  display: flex;
+  overflow-y: hidden;
 
   .title {
     color: rgb(244, 255, 196) !important;
@@ -86,9 +26,10 @@
   }
 
   .separatecol {
-    position: absolute;
-    top: 20px;
-    left: 350px;
+    // position: absolute;
+    // top: 20px;
+    // left: 350px;
+    display: inline-block;
     height: 85vh;
     width: 2px;
     border-left: 3px solid rgb(131, 125, 125);
@@ -103,9 +44,15 @@
     border-bottom: 3px solid rgb(240, 82, 82);
   }
 
+  .mapall {
+    margin-right: 50px;
+    margin-left: 50px;
+    display: inline-block;
+  }
+
   .mapall1 {
-    position: relative;
-    left: 100px;
+    // position: relative;
+    // left: 100px;
 
     #map1 {
       height: 300px;
@@ -123,9 +70,9 @@
   }
 
   .mapall2 {
-    position: absolute;
-    top: 0;
-    left: 500px;
+    // position: absolute;
+    // top: 0;
+    // left: 500px;
 
     #map3 {
       height: 300px;
@@ -143,9 +90,9 @@
   }
 
   .mapall3 {
-    position: absolute;
-    top: 0;
-    left: 900px;
+    // position: absolute;
+    // top: 0;
+    // left: 900px;
 
     #map5 {
       height: 300px;
@@ -163,9 +110,9 @@
   }
 
   .mapall4 {
-    position: absolute;
-    top: 0;
-    left: 1300px;
+    // position: absolute;
+    // top: 0;
+    // left: 1300px;
 
     #map7 {
       height: 300px;
@@ -183,18 +130,10 @@
   }
 
   .mapall5 {
-    position: absolute;
-    top: 0;
-    left: 1700px;
-
-    .separatecol {
-      position: absolute;
-      top: 20px;
-      left: 1100px;
-      height: 85vh;
-      width: 2px;
-      border-left: 3px solid rgb(131, 125, 125);
-    }
+    // position: absolute;
+    // top: 0;
+    // left: 1700px;
+    margin-right: 500px;
 
     #map9 {
       height: 600px;
@@ -210,26 +149,18 @@
       }
 
       width: 400px;
-      position: absolute;
-      top: 80px;
-      left: 640px;
-      // margin-right: 100px;
+      position: relative;
+      top: -620px;
+      left: 650px;
+      margin-right: 100px;
     }
   }
 
   .mapall6 {
-    position: absolute;
-    top: 0;
-    left: 2900px;
+    // position: absolute;
+    // top: 0;
+    // left: 2900px;
 
-    .separatecol {
-      position: absolute;
-      top: 20px;
-      left: 800px;
-      height: 85vh;
-      width: 2px;
-      border-left: 3px solid rgb(131, 125, 125);
-    }
 
     #map10 {
       height: 600px;
@@ -247,4 +178,27 @@
   .ol-scale-line {
     left: 15em;
   }
+}
+
+.App::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 4px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 10px;
+  scrollbar-arrow-color: red;
+}
+
+.App::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 55px rgba(218, 31, 31, 0.5);
+  background: rgba(250, 248, 248, 0.2);
+  scrollbar-arrow-color: red;
+}
+
+.App::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.1);
 }

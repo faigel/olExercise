@@ -458,30 +458,29 @@ const App = () => {
     console.log(e);
     console.log(e.deltaY);
     console.log(e.currentTarget.scrollLeft);
-    e.currentTarget.scrollLeft += e.deltaY;
+    !e.defaultPrevented && (e.currentTarget.scrollLeft += e.deltaY);
     console.log(e.currentTarget.scrollLeft);
   };
 
   return (
-    <div className="App" onWheel={e =>yWhell(e)}>
-      <div className="mapall1">
+    <div className="App" onWheel={e => yWhell(e)}>
+      <div className="mapall1 mapall">
         <h1>单页面多地图</h1>
         <p className="title">地图1（地图范围限制）</p>
         <div id="map1"></div>
         <p className="title">地图2（缩放层级限制）</p>
         <div id="map2"></div>
-        <div className="separatecol"></div>
       </div>
-
-      <div className="mapall2">
+      <div className="separatecol"></div>
+      <div className="mapall2 mapall">
         <h1>地图联动</h1>
         <p className="title">地图3</p>
         <div id="map3"></div>
         <p className="title">地图4（高德卫星图）</p>
         <div id="map4"></div>
-        <div className="separatecol"></div>
       </div>
-      <div className="mapall3">
+      <div className="separatecol"></div>
+      <div className="mapall3 mapall">
         <h1>动态交换地图</h1>
         <p
           style={{ display: "inline-block", marginRight: "50px", marginTop: "1px" }}
@@ -532,9 +531,9 @@ const App = () => {
           向右移动
         </button>
         <div id="map6"></div>
-        <div className="separatecol"></div>
       </div>
-      <div className="mapall4">
+      <div className="separatecol"></div>
+      <div className="mapall4 mapall">
         <h1>矢量地图图层叠加</h1>
         <p
           style={{ display: "inline-block", marginRight: "30px", marginTop: "1px" }}
@@ -621,9 +620,9 @@ const App = () => {
         </button>
         <div>{`坐标：${coordinate}`}</div>
         <div id="map8"></div>
-        <div className="separatecol"></div>
       </div>
-      <div className="mapall5">
+      <div className="separatecol"></div>
+      <div className="mapall5 mapall">
         <h1>地图控件</h1>
         <p
           style={{ display: "inline-block", marginRight: "30px", marginTop: "1px" }}
@@ -650,9 +649,9 @@ const App = () => {
           <h5>ol.control.ZoomSlider: 缩放滚动条控件</h5>
           <h5>ol.control.ZoomToExtent: 放大到设定区域控件</h5>
         </div>
-        <div className="separatecol"></div>
       </div>
-      <div className="mapall6">
+      <div className="separatecol"></div>
+      <div className="mapall6 mapall">
         <h1>地图多边形导出</h1>
         <p
           style={{ display: "inline-block", marginRight: "30px", marginTop: "1px" }}
@@ -675,10 +674,10 @@ const App = () => {
           清除
         </button>
         <div id="map10"></div>
-        <div className="separatecol"></div>
       </div>
+      <div className="separatecol"></div>
       <div className="separaterow"></div>
-      <div style={{ marginLeft: "50px", marginTop: "90px", color: "rgb(240, 82, 82)" }}>
+      {/* <div style={{ marginLeft: "50px", marginTop: "90px", color: "rgb(240, 82, 82)" }}>
         此olExercise项目仅为练手项目，本页面的所有地图及其交互方法全部系本人独立完成。
       </div>
       <div style={{ marginLeft: "50px", marginTop: "10px", color: "#fff" }}>
@@ -686,7 +685,7 @@ const App = () => {
         OpenLayers3简称ol3，它是一个开源的WebGIS引擎，使用了JavaScript、最新的HTML5技术及CSS技术，支持dom，canvas和webgl三种渲染方式。除了支持网页端，还支持移动端（目前移动端还不成熟，有待进一步完善）。在地图数据源方面，支持各种类型的瓦片地图，既支持在线的，也支持离线的。比如OSM,
         Bing, MapBox,
         Stamen,MapQuest等等；还支持各种矢量地图，比如GeoJSON，TopoJSON，KML，GML等等。随着OpenLayers3的进一步发展，将支持更多的地图类型。
-      </div>
+      </div> */}
       {/* <button onClick={() => mapDispatch({ type: "add" })}>dianji</button> */}
     </div>
   );
