@@ -15,13 +15,14 @@ import XYZ from "ol/source/XYZ";
 import Draw from "ol/interaction/Draw";
 import * as olControl from "ol/control";
 import { Style, Circle, Fill, Stroke } from "ol/style";
-import { message } from "antd";
+import { message, button, Progress } from "antd";
 import GeoJSON from "ol/format/GeoJSON";
 import { createBox } from "ol/interaction/Draw";
 
 import { saveAs } from "file-saver";
 
 const App = () => {
+  const ref = useRef();
   const mapReduce = (state, action) => {
     switch (action.type) {
       case "add":
@@ -41,6 +42,7 @@ const App = () => {
   const [mapLayer, setMapLayer] = useState();
   const [dbxlayer, setDbxlayer] = useState();
   const [dbxdraw, setDbxdraw] = useState();
+  const [jdt, setJdt] = useState(0);
   useEffect(() => {
     loadMap();
     mapDispatch({ type: "add" });
@@ -454,16 +456,19 @@ const App = () => {
     setIsdraw(false);
     mapList.map8.removeInteraction(toolLayer.lineDraw);
   };
+
   const yWhell = e => {
     console.log(e);
-    console.log(e.deltaY);
-    console.log(e.currentTarget.scrollLeft);
+    console.log(ref);
+    // console.log(e.deltaY);
+    // console.log(e.currentTarget.scrollLeft);
     !e.defaultPrevented && (e.currentTarget.scrollLeft += e.deltaY);
-    console.log(e.currentTarget.scrollLeft);
+    console.log(e.currentTarget.scrollLeft / 1548);
+    setJdt(e.currentTarget.scrollLeft / 15.48);
   };
 
   return (
-    <div className="App" onWheel={e => yWhell(e)}>
+    <div className="App" ref={ref} onWheel={e => yWhell(e)}>
       <div className="mapall1 mapall">
         <h1>单页面多地图</h1>
         <p className="title">地图1（地图范围限制）</p>
@@ -677,6 +682,20 @@ const App = () => {
       </div>
       <div className="separatecol"></div>
       <div className="separaterow"></div>
+      <div className="progress">
+        <Progress
+          percent={jdt}
+          type="line"
+          strokeColor={{
+            "0%": "#ffffff",
+            "100%": "#ffffff",
+          }}
+          strokeWidth="3px"
+          trailColor="#424245"
+          showInfo={false}
+        />
+      </div>
+
       {/* <div style={{ marginLeft: "50px", marginTop: "90px", color: "rgb(240, 82, 82)" }}>
         此olExercise项目仅为练手项目，本页面的所有地图及其交互方法全部系本人独立完成。
       </div>
